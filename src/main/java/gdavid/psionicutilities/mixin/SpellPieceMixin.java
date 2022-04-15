@@ -18,7 +18,7 @@ import vazkii.psi.common.spell.other.PieceCrossConnector;
 public class SpellPieceMixin {
 	
 	@OnlyIn(Dist.CLIENT)
-	@Redirect(method = "drawParam", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(IIII)Lcom/mojang/blaze3d/vertex/IVertexBuilder;"))
+	@Redirect(method = "drawParam", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(IIII)Lcom/mojang/blaze3d/vertex/IVertexBuilder;", remap = true))
 	private IVertexBuilder paramColor(IVertexBuilder builder, int r, int g, int b, int a, MatrixStack ms, IVertexBuilder buffer, int light, SpellParam<?> param) {
 		SpellPiece self = (SpellPiece) (Object) this;
 		if (self instanceof PieceConnector || self instanceof PieceCrossConnector) {

@@ -29,7 +29,7 @@ public abstract class CrossConnectorMixin extends SpellPiece implements IGeneric
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(FFFF)Lcom/mojang/blaze3d/vertex/IVertexBuilder;"))
+	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(FFFF)Lcom/mojang/blaze3d/vertex/IVertexBuilder;", remap = true))
 	private IVertexBuilder sideColor(IVertexBuilder builder, float r, float g, float b, float a, MatrixStack ms, IRenderTypeBuffer buffers, Side side, int light, int color) {
 		boolean which = side == paramSides.get(in2) || side == paramSides.get(out2);
 		int[] t = Util.getPartialRedirect(this, which ? paramSides.get(in2) : paramSides.get(in1));

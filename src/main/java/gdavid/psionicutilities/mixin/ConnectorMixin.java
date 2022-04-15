@@ -24,7 +24,7 @@ public abstract class ConnectorMixin extends SpellPiece implements IRedirector {
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(FFFF)Lcom/mojang/blaze3d/vertex/IVertexBuilder;"))
+	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(FFFF)Lcom/mojang/blaze3d/vertex/IVertexBuilder;", remap = true))
 	private IVertexBuilder sideColor(IVertexBuilder builder, float r, float g, float b, float a, MatrixStack ms, IRenderTypeBuffer buffers, int light, Side side) {
 		int[] t = Util.getPartialRedirect(this, getRedirectionSide());
 		float[] rgb = Util.getColor(t[0], t[1]);
