@@ -1,0 +1,31 @@
+# Eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# Idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# Gradle
+build
+.gradle
+
+# Other
+eclipse
+run
+
+# Files from Forge MDK
+forge*changelog.txt
+
+# Maven
+mcmodsrepo
+
+# MacOS
+**/.DS_Store

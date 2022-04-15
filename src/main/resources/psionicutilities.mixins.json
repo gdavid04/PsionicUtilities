@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "gdavid.psionicutilities.mixin",
+	"compatibilityLevel": "JAVA_8",
+	"refmap": "psionicutilities.refmap.json",
+	"mixins": [
+		"ConnectorMixin",
+		"SpellPieceMixin"
+	],
+	"minVersion": "0.8"
+}
