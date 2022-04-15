@@ -12,6 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.psi.api.spell.SpellParam;
 import vazkii.psi.api.spell.SpellPiece;
 import vazkii.psi.common.spell.other.PieceConnector;
+import vazkii.psi.common.spell.other.PieceCrossConnector;
 
 @Mixin(value = SpellPiece.class, remap = false)
 public class SpellPieceMixin {
@@ -20,8 +21,8 @@ public class SpellPieceMixin {
 	@Redirect(method = "drawParam", at = @At(value = "INVOKE", target = "com/mojang/blaze3d/vertex/IVertexBuilder.color(IIII)Lcom/mojang/blaze3d/vertex/IVertexBuilder;"))
 	private IVertexBuilder paramColor(IVertexBuilder builder, int r, int g, int b, int a, MatrixStack ms, IVertexBuilder buffer, int light, SpellParam<?> param) {
 		SpellPiece self = (SpellPiece) (Object) this;
-		if (self instanceof PieceConnector) {
-			int[] t = Util.getPartialRedirect(self, ((PieceConnector) self).getRedirectionSide());
+		if (self instanceof PieceConnector || self instanceof PieceCrossConnector) {
+			int[] t = Util.getPartialRedirect(self, self.paramSides.get(param));
 			float[] rgb = Util.getColor(t[0], t[1]);
 			return builder.color(rgb[0], rgb[1], rgb[2], a / 255f);
 		}

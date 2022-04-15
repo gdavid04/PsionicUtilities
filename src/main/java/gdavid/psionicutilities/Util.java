@@ -52,6 +52,7 @@ public class Util {
 					t[0] += side.offx;
 					t[1] += side.offy;
 				}
+				// TODO support IGenericRedirector
 				return t;
 			} catch (SpellCompilationException e) {
 			}

@@ -4,8 +4,9 @@
 	"compatibilityLevel": "JAVA_8",
 	"refmap": "psionicutilities.refmap.json",
 	"mixins": [
+		"SpellPieceMixin",
 		"ConnectorMixin",
-		"SpellPieceMixin"
+		"CrossConnectorMixin"
 	],
 	"minVersion": "0.8"
 }
