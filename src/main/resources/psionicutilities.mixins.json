@@ -6,7 +6,8 @@
 	"mixins": [
 		"SpellPieceMixin",
 		"ConnectorMixin",
-		"CrossConnectorMixin"
+		"CrossConnectorMixin",
+		"PhiMixin"
 	],
 	"minVersion": "0.8"
 }

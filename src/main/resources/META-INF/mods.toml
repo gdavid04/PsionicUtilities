@@ -30,3 +30,9 @@ A Psi addon to make spell programming easier
     versionRange="[1.16-95,)"
     ordering="AFTER"
     side="BOTH"
+[[dependencies.psionicutilities]]
+    modId="phi"
+    mandatory=false
+    versionRange="[1.16-2.5,)"
+    ordering="AFTER"
+    side="BOTH"

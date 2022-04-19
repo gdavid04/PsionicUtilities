@@ -36,6 +36,10 @@ public class Util {
 		return new float[] { 1, 1, 1 };
 	}
 	
+	public static int getColorId(int x, int y) {
+		return (SpellGrid.exists(x, y)) ? Color.HSBtoRGB(Util.hues[x + y * 9], 0.8f, 1) : 0xFFFFFF;
+	}
+	
 	public static int[] getPartialRedirect(SpellPiece piece, Side side) {
 		if (piece.isInGrid) {
 			try {

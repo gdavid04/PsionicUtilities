@@ -12,5 +12,5 @@ This mod is client side only, you don't have to install it on the server to use 
 - Planned: insert Cross Connectors with shift-arrow
 
 ## Addon support
+- [Phi](https://www.curseforge.com/minecraft/mc-mods/phi): supported
 - [Magical Psi](https://www.curseforge.com/minecraft/mc-mods/magical-psi-redux): planned
-- [Phi](https://www.curseforge.com/minecraft/mc-mods/phi): planned
