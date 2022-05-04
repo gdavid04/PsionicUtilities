@@ -7,6 +7,10 @@
 		"SpellPieceMixin",
 		"ConnectorMixin",
 		"CrossConnectorMixin",
+		"ExtractXMixin",
+		"ExtractYMixin",
+		"ExtractZMixin",
+		"NumberConstantMixin",
 		"PhiMixin"
 	],
 	"minVersion": "0.8"

@@ -6,8 +6,8 @@ This mod is client side only, you don't have to install it on the server to use 
 
 ## Features
 - Color coded connectors based on which piece they connect to
-- Planned: change between Extract X, Y and Z with hotkeys and buttons
-- Planned: improve Number Constant editing
+- Change between Extract X, Y and Z with hotkeys (planned: config panel buttons)
+- Improved Number Constant editing
 - Planned: hotkey to highlight tricks, unused, dependency and dependent pieces
 - Planned: insert Cross Connectors with shift-arrow
 
