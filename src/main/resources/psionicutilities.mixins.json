@@ -1,9 +1,11 @@
 {
 	"required": true,
+	"minVersion": "0.8.3",
 	"package": "gdavid.psionicutilities.mixin",
-	"compatibilityLevel": "JAVA_8",
+	"compatibilityLevel": "JAVA_17",
 	"refmap": "psionicutilities.refmap.json",
-	"mixins": [
+	"mixins": [],
+	"client": [
 		"SpellPieceMixin",
 		
 		"StatWidgetMixin",
@@ -16,6 +18,5 @@
 		"ExtractZMixin",
 		
 		"PhiMixin"
-	],
-	"minVersion": "0.8"
+	]
 }

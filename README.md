@@ -8,6 +8,7 @@ This mod is client side only, you don't have to install it on the server to use 
 - Color coded connectors based on which piece they connect to
 - Change between Extract X, Y and Z with hotkeys (planned: config panel buttons)
 - Improved Number Constant editing
+- Color coded psi cost based on the sustainability or danger of the spell
 - Planned: hotkey to highlight tricks, unused, dependency and dependent pieces
 - Planned: insert Cross Connectors with shift-arrow
 

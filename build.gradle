@@ -1,11 +1,11 @@
 buildscript {
 	repositories {
-		maven { url = 'https://files.minecraftforge.net/maven' }
-		maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+		maven { url = 'https://maven.minecraftforge.net' }
+		maven { url = 'https://repo.spongepowered.org/maven' }
 		mavenCentral()
 	}
 	dependencies {
-		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+		classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1+', changing: true
 		classpath group: 'org.spongepowered', name: 'mixingradle', version: '0.7-SNAPSHOT'
 	}
 }
@@ -19,36 +19,13 @@ apply plugin: 'maven-publish'
 group = 'gdavid.psionicutilities'
 archivesBaseName = 'psionicutilities'
 
-sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-	mappings channel: "snapshot", version: "20200916-1.16.2"
+	mappings channel: 'official', version: '1.18.2'
 	runs {
 		client {
 			workingDirectory project.file('run')
-			property 'forge.logging.console.level', 'debug'
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-			arg "-mixin.config=psionicutilities.mixins.json"
-			mods {
-				psionicutilities { source sourceSets.main }
-			}
-		}
-		server {
-			workingDirectory project.file('run')
-			property 'forge.logging.console.level', 'debug'
-			property 'mixin.env.remapRefMap', 'true'
-			property 'mixin.env.refMapRemappingFile', "${buildDir}/createSrgToMcp/output.srg"
-			mods {
-				psionicutilities { source sourceSets.main }
-			}
-		}
-		data {
-			workingDirectory project.file('run')
-			property 'forge.logging.console.level', 'debug'
-			args '--mod', 'psionicutilities', '--all',
-				'--output', file('src/generated/resources/'),
-				'--existing', file('src/main/resources/')
 			mods {
 				psionicutilities { source sourceSets.main }
 			}
@@ -59,12 +36,12 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-	maven { url "http://maven.blamejared.com/" }
+	maven { url "https://maven.blamejared.com/" }
 }
 
 dependencies {
-	minecraft group: 'net.minecraftforge', name: 'forge', version: "1.16.5-36.2.26"
-	annotationProcessor 'org.spongepowered:mixin:0.8:processor'
+	minecraft group: 'net.minecraftforge', name: 'forge', version: "1.18.2-40.1.19"
+	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("vazkii.psi:Psi:${psi_version}")
 	runtimeOnly fg.deobf("vazkii.psi:Psi:${psi_version}")
@@ -74,6 +51,7 @@ dependencies {
 
 mixin {
 	add sourceSets.main, "psionicutilities.refmap.json"
+	config 'psionicutilities.mixins.json'
 }
 
 jar {

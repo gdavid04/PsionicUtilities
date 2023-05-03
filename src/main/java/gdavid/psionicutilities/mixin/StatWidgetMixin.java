@@ -2,6 +2,9 @@ package gdavid.psionicutilities.mixin;
 
 import java.util.Iterator;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -11,10 +14,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.cad.EnumCADStat;
 import vazkii.psi.api.cad.ICAD;
@@ -35,20 +34,18 @@ public class StatWidgetMixin {
 	@Inject(method = "lambda$renderButton$0",
 			at = @At(value = "INVOKE", target = "Lvazkii/psi/api/spell/SpellMetadata;getStat(Lvazkii/psi/api/spell/EnumSpellStat;)I"),
 			locals = LocalCapture.CAPTURE_FAILHARD)
-	private void capture(MatrixStack ms, int mouseX, int mouseY, CompiledSpell compiledSpell, CallbackInfo callback,
+	private void capture(PoseStack ms, int mouseX, int mouseY, CompiledSpell compiledSpell, CallbackInfo callback,
 			int i, int statX, SpellMetadata meta, ItemStack cad, Iterator<?> var9, EnumSpellStat stat) {
 		currentStat.set(stat);
-		
 	}
 	
-	@SuppressWarnings("resource")
 	@ModifyArg(method = "lambda$renderButton$0",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/FontRenderer;drawString(Lcom/mojang/blaze3d/matrix/MatrixStack;Ljava/lang/String;FFI)I", remap = true),
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;draw(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I", remap = true),
 			index = 4)
 	private int setColor(int color) {
 		if (currentStat.get() == EnumSpellStat.COST) {
 			if (parent.compileResult.left().isPresent()) {
-				PlayerEntity player = parent.getMinecraft().player;
+				Player player = parent.getMinecraft().player;
 				SpellMetadata meta = parent.compileResult.left().get().metadata;
 				ItemStack cad = PsiAPI.getPlayerCAD(player);
 				int realCost = ItemCAD.getRealCost(cad, ItemStack.EMPTY, meta.getStat(EnumSpellStat.COST));
