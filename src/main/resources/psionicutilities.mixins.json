@@ -4,19 +4,16 @@
 	"package": "gdavid.psionicutilities.mixin",
 	"compatibilityLevel": "JAVA_17",
 	"refmap": "psionicutilities.refmap.json",
-	"mixins": [],
+	"mixins": [ ],
 	"client": [
-		"SpellPieceMixin",
-		
-		"StatWidgetMixin",
-		
 		"ConnectorMixin",
 		"CrossConnectorMixin",
-		"NumberConstantMixin",
 		"ExtractXMixin",
 		"ExtractYMixin",
 		"ExtractZMixin",
-		
-		"PhiMixin"
+		"PhiMixin",
+		"NumberConstantMixin",
+		"SpellPieceMixin",
+		"StatWidgetMixin"
 	]
 }

@@ -3,14 +3,14 @@ package gdavid.psionicutilities.mixin;
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
 import gdavid.psionicutilities.PsionicUtilities;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.model.Material;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.*;
 
 import gdavid.psionicutilities.Util;
 import net.minecraftforge.api.distmarker.Dist;
@@ -23,6 +23,7 @@ import vazkii.psi.api.spell.SpellPiece;
 
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.List;
 
 @Mixin(value = SpellPiece.class, remap = false)
 public abstract class SpellPieceMixin {
@@ -56,6 +57,26 @@ public abstract class SpellPieceMixin {
 		}
 	}
 	
+	@OnlyIn(Dist.CLIENT)
+	@Inject(method = "drawComment", at = @At("HEAD"), cancellable = true)
+	private void drawComment(PoseStack ms, MultiBufferSource buffers, int light, CallbackInfo callback) {
+		SpellPiece self = (SpellPiece) (Object) this;
+		if (self.comment != null) {
+			String prefix = "@color=";
+			if (Arrays.stream(self.comment.split(";")).allMatch(ln ->
+				ln.startsWith(prefix) && TextColor.parseColor(ln.substring(prefix.length())) != null
+			)) callback.cancel();
+		}
+	}
+	
+	@OnlyIn(Dist.CLIENT)
+	@Inject(method = "drawCommentText", at = @At("HEAD"))
+	private void visibleCommentText(PoseStack ms, int tooltipX, int tooltipY, List<Component> commentText, Screen screen, CallbackInfo callback) {
+		String prefix = "@color=";
+		commentText.stream().filter(ln -> ln.getString().startsWith(prefix)).findFirst().ifPresent(commentText::remove);
+	}
+	
+	@OnlyIn(Dist.CLIENT)
 	private void drawHighlight(PoseStack ms, MultiBufferSource buffers, int light, int value) {
 		int r = (value >> 16) & 0xFF;
 		int g = (value >> 8) & 0xFF;
