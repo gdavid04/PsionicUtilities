@@ -22,7 +22,7 @@ archivesBaseName = 'psionicutilities'
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 minecraft {
-	mappings channel: 'official', version: '1.18.2'
+	mappings channel: 'official', version: '1.19.2'
 	runs {
 		client {
 			workingDirectory project.file('run')
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-	minecraft group: 'net.minecraftforge', name: 'forge', version: "1.18.2-40.1.19"
+	minecraft group: 'net.minecraftforge', name: 'forge', version: "1.19.2-43.3.0"
 	annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 	compileOnly fg.deobf("vazkii.psi:Psi:${psi_version}")

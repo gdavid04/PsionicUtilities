@@ -4,15 +4,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.IExtensionPoint.DisplayTest;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import net.minecraftforge.network.NetworkConstants;
-
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.registries.RegisterEvent;
 import vazkii.psi.api.ClientPsiAPI;
 
 @Mod(PsionicUtilities.modId)
@@ -28,7 +27,7 @@ public class PsionicUtilities {
 	
 	@OnlyIn(Dist.CLIENT)
 	@SubscribeEvent
-	public static void registerTextures(Register<Item> e) {
+	public static void registerTextures(RegisterEvent e) {
 		ClientPsiAPI.registerPieceTexture(new ResourceLocation(modId, "highlight"), new ResourceLocation(modId, "spell/highlight"));
 	}
 	
