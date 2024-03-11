@@ -64,7 +64,7 @@ public abstract class NumberConstantMixin extends SpellPiece {
 				} catch (NumberFormatException e) {
 					return false;
 				}
-				if (doit) valueStr = tmp;
+				valueStr = tmp;
 			}
 			return true;
 		}

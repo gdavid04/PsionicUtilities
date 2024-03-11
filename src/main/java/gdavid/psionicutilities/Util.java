@@ -26,12 +26,11 @@ public class Util {
 	public static float[] getColor(int x, int y) {
 		if (SpellGrid.exists(x, y)) {
 			int color = Color.HSBtoRGB(Util.hues[x + y * 9], 0.8f, 1);
-			float[] res = new float[] {
+			return new float[] {
 				PsiRenderHelper.r(color) / 255f,
 				PsiRenderHelper.g(color) / 255f,
 				PsiRenderHelper.b(color) / 255f
 			};
-			return res;
 		}
 		return new float[] { 1, 1, 1 };
 	}
@@ -59,6 +58,7 @@ public class Util {
 				// TODO support IGenericRedirector
 				return t;
 			} catch (SpellCompilationException e) {
+				// Fallback, we're likely in a loop
 			}
 		}
 		return new int[] { -1, -1 };

@@ -1,4 +1,4 @@
-name: Check
+name: Build
 on: [push, pull_request]
 jobs:
   build:
@@ -18,3 +18,8 @@ jobs:
           key: ${{runner.os}}-gradle-${{hashFiles('build.gradle')}}
       - name: Gradle Build
         run: ./gradlew build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Artifacts
+          path: build/libs/
