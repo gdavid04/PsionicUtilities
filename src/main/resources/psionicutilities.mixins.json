@@ -11,8 +11,9 @@
 		"ExtractXMixin",
 		"ExtractYMixin",
 		"ExtractZMixin",
-		"PhiMixin",
+		"KeybindHandlerMixin",
 		"NumberConstantMixin",
+		"PhiMixin",
 		"SpellPieceMixin",
 		"StatWidgetMixin"
 	]

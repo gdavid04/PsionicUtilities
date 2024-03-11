@@ -10,6 +10,7 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
+import net.minecraftforge.fml.config.ModConfig.Type;
 import net.minecraftforge.network.NetworkConstants;
 import net.minecraftforge.registries.RegisterEvent;
 import vazkii.psi.api.ClientPsiAPI;
@@ -23,6 +24,7 @@ public class PsionicUtilities {
 	public PsionicUtilities() {
 		ModLoadingContext.get().registerExtensionPoint(DisplayTest.class,
 			() -> new DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
+		ModLoadingContext.get().registerConfig(Type.CLIENT, Config.spec);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
