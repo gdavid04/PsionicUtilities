@@ -11,7 +11,7 @@ public class Config {
 	public final BooleanValue disableGuideBookHotkey;
 	
 	public Config(ForgeConfigSpec.Builder builder) {
-		disableGuideBookHotkey = builder.comment("Disable showing guide book with the Psi keybind").define("disableGuideBookHotkey", false);
+		disableGuideBookHotkey = builder.comment("Disable showing guide book with the Psi keybind").define("disableGuideBookHotkey", true);
 	}
 	
 	static {
