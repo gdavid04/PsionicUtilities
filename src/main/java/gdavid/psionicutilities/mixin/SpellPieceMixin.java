@@ -2,17 +2,17 @@ package gdavid.psionicutilities.mixin;
 
 import com.mojang.blaze3d.vertex.*;
 import com.mojang.math.Matrix4f;
+import gdavid.psionicutilities.PieceAnnotation;
 import gdavid.psionicutilities.PsionicUtilities;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
-import gdavid.psionicutilities.Util;
+import gdavid.psionicutilities.ConnectorColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -21,8 +21,6 @@ import vazkii.psi.api.spell.IGenericRedirector;
 import vazkii.psi.api.spell.SpellParam;
 import vazkii.psi.api.spell.SpellPiece;
 
-import java.util.Arrays;
-import java.util.Optional;
 import java.util.List;
 
 @Mixin(value = SpellPiece.class, remap = false)
@@ -34,8 +32,7 @@ public abstract class SpellPieceMixin {
 		SpellPiece self = (SpellPiece) (Object) this;
 		// TODO Phi IWarpRedirector support
 		if (self instanceof IGenericRedirector) {
-			int[] t = Util.getPartialRedirect(self, side);
-			float[] rgb = Util.getColor(t[0], t[1]);
+			float[] rgb = ConnectorColor.colorFor(self, side);
 			return builder.color(rgb[0], rgb[1], rgb[2], a / 255f);
 		}
 		return builder.color(r, g, b, a);
@@ -45,35 +42,20 @@ public abstract class SpellPieceMixin {
 	@Inject(method = "drawBackground", at = @At("HEAD"))
 	private void drawBackground(PoseStack ms, MultiBufferSource buffers, int light, CallbackInfo callback) {
 		SpellPiece self = (SpellPiece) (Object) this;
-		if (self.comment != null) {
-			String prefix = "@color=";
-			Optional<String> str = Arrays.stream(self.comment.split(";")).filter(ln -> ln.startsWith(prefix)).findFirst().map(ln -> ln.substring(prefix.length()));
-			str.ifPresent(color -> {
-				TextColor value = TextColor.parseColor(color);
-				if (value != null) {
-					drawHighlight(ms, buffers, light, value.getValue());
-				}
-			});
-		}
+		PieceAnnotation.color(self).ifPresent(color -> drawHighlight(ms, buffers, light, color));
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	@Inject(method = "drawComment", at = @At("HEAD"), cancellable = true)
 	private void drawComment(PoseStack ms, MultiBufferSource buffers, int light, CallbackInfo callback) {
 		SpellPiece self = (SpellPiece) (Object) this;
-		if (self.comment != null) {
-			String prefix = "@color=";
-			if (Arrays.stream(self.comment.split(";")).allMatch(ln ->
-				ln.startsWith(prefix) && TextColor.parseColor(ln.substring(prefix.length())) != null
-			)) callback.cancel();
-		}
+		if (!PieceAnnotation.hasComment(self)) callback.cancel();
 	}
 	
 	@OnlyIn(Dist.CLIENT)
 	@Inject(method = "drawCommentText", at = @At("HEAD"))
 	private void visibleCommentText(PoseStack ms, int tooltipX, int tooltipY, List<Component> commentText, Screen screen, CallbackInfo callback) {
-		String prefix = "@color=";
-		commentText.stream().filter(ln -> ln.getString().startsWith(prefix)).findFirst().ifPresent(commentText::remove);
+		PieceAnnotation.filterComment(commentText);
 	}
 	
 	@OnlyIn(Dist.CLIENT)

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
-import gdavid.psionicutilities.Util;
+import gdavid.psionicutilities.ConnectorColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.psi.api.spell.IGenericRedirector;
@@ -32,8 +32,7 @@ public abstract class CrossConnectorMixin extends SpellPiece implements IGeneric
 	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/VertexConsumer;color(FFFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;", remap = true))
 	private VertexConsumer sideColor(VertexConsumer builder, float r, float g, float b, float a, PoseStack ms, MultiBufferSource buffers, Side side, int light, int color) {
 		boolean which = side == paramSides.get(in2) || side == paramSides.get(out2);
-		int[] t = Util.getPartialRedirect(this, which ? paramSides.get(in2) : paramSides.get(in1));
-		float[] rgb = Util.getColor(t[0], t[1]);
+		float[] rgb = ConnectorColor.colorFor(this, which ? paramSides.get(in2) : paramSides.get(in1));
 		return builder.color(rgb[0], rgb[1], rgb[2], a);
 	}
 	
