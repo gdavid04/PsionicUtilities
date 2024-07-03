@@ -10,6 +10,7 @@ This mod is client side only, you don't have to install it on the server to use 
 - Draw connector chains with the mouse
 - Move pieces by dragging them with the mouse while holding alt
 - Improved Number Constant editing
+- Smart parameter setting when replacing connectors with pieces
 - Color coded psi cost based on the sustainability or danger of the spell
 - Colored piece outlines using the @color=name_or_hex comment annotation (planned: config panel buttons)
 - Override outbound connector colors using the @out-color=name_or_hex comment annotation (planned: config panel buttons)
