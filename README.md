@@ -14,6 +14,7 @@ This mod is client side only, you don't have to install it on the server to use 
 - Colored piece outlines using the @color=name_or_hex comment annotation (planned: config panel buttons)
 - Override outbound connector colors using the @out-color=name_or_hex comment annotation (planned: config panel buttons)
 - Option to disable showing guide book with the Psi keybind
+- Option to use shift-tab to cycle through pieces in the catalog in reverse order
 - Planned: hotkey to highlight tricks, unused, dependency and dependent pieces
 - Planned: insert Cross Connectors with shift-arrow
 

@@ -6,6 +6,7 @@
 	"refmap": "psionicutilities.refmap.json",
 	"mixins": [ ],
 	"client": [
+		"CatalogMixin",
 		"ConnectorMixin",
 		"CrossConnectorMixin",
 		"ExtractXMixin",
