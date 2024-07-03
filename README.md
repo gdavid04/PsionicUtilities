@@ -7,6 +7,8 @@ This mod is client side only, you don't have to install it on the server to use 
 ## Features
 - Color coded connectors based on which piece they connect to
 - Change between Extract X, Y and Z with hotkeys (planned: config panel buttons)
+- Draw connector chains with the mouse
+- Move pieces by dragging them with the mouse while holding alt
 - Improved Number Constant editing
 - Color coded psi cost based on the sustainability or danger of the spell
 - Colored piece outlines using the @color=name_or_hex comment annotation (planned: config panel buttons)
