@@ -14,6 +14,7 @@ import vazkii.psi.api.spell.SpellParam.Side;
 import vazkii.psi.client.gui.GuiProgrammer;
 import vazkii.psi.common.block.tile.TileProgrammer;
 import vazkii.psi.common.spell.other.PieceConnector;
+import vazkii.psi.common.spell.other.PieceCrossConnector;
 
 import static net.minecraft.client.gui.screens.Screen.hasControlDown;
 
@@ -85,8 +86,34 @@ public abstract class ProgrammerGuiMixin {
 	
 	// onSpellChanged(false); must be called afterwards
 	private void insertConnectorSilent(int x, int y, Side side) {
+		if (spell.grid.getPieceAtSideSafely(x, y, side) instanceof PieceCrossConnector cross) {
+			var accessor = (CrossConnectorPieceAccessor) cross;
+			if (!cross.paramSides.containsValue(side.getOpposite())) {
+				if (!cross.paramSides.get(accessor.getOut2()).isEnabled()) cross.paramSides.put(accessor.getOut2(), side.getOpposite());
+				else if (!cross.paramSides.get(accessor.getOut1()).isEnabled()) cross.paramSides.put(accessor.getOut1(), side.getOpposite());
+			}
+		}
+		if (spell.grid.gridData[x][y] instanceof PieceConnector old) {
+			if (old.paramSides.get(old.target) == side) return;
+			Side output = Side.OFF;
+			for (var dir : Side.values()) {
+				var neighbour = spell.grid.getPieceAtSideSafely(old.x, old.y, dir);
+				if (neighbour == null || !neighbour.isInputSide(dir.getOpposite())) continue;
+				if (output.isEnabled() || dir == side) return;
+				output = dir;
+			}
+			var connector = new PieceCrossConnector(spell);
+			var accessor = (CrossConnectorPieceAccessor) connector;
+			connector.x = x;
+			connector.y = y;
+			connector.paramSides.put(accessor.getIn1(), old.paramSides.get(old.target));
+			connector.paramSides.put(accessor.getOut1(), output);
+			connector.paramSides.put(accessor.getIn2(), side);
+			spell.grid.gridData[x][y] = connector;
+			return;
+		}
 		if (spell.grid.gridData[x][y] != null) return;
-		PieceConnector connector = new PieceConnector(spell);
+		var connector = new PieceConnector(spell);
 		connector.x = x;
 		connector.y = y;
 		connector.paramSides.put(connector.target, side);

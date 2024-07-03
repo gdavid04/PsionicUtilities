@@ -9,6 +9,7 @@
 		"CatalogMixin",
 		"ConnectorMixin",
 		"CrossConnectorMixin",
+		"CrossConnectorPieceAccessor",
 		"ExtractXMixin",
 		"ExtractYMixin",
 		"ExtractZMixin",
