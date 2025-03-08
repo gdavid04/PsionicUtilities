@@ -17,12 +17,12 @@ import vazkii.psi.client.gui.GuiProgrammer;
 import vazkii.psi.client.gui.widget.PiecePanelWidget;
 import vazkii.psi.common.spell.other.PieceConnector;
 
-@Mixin(PiecePanelWidget.class)
+@Mixin(value = PiecePanelWidget.class, remap = false)
 public class CatalogMixin {
 	
 	@Shadow @Final public GuiProgrammer parent;
 	
-	@Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;hasAltDown()Z"))
+	@Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;hasAltDown()Z", remap = true), remap = true)
 	private boolean hasAltDown() {
 		return Config.instance.foucsPreviousWithShift.get() ? Screen.hasShiftDown() : Screen.hasAltDown();
 	}

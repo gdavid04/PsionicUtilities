@@ -6,7 +6,7 @@ import vazkii.psi.api.spell.SpellParam;
 import vazkii.psi.api.spell.SpellParam.Any;
 import vazkii.psi.common.spell.other.PieceCrossConnector;
 
-@Mixin(PieceCrossConnector.class)
+@Mixin(value = PieceCrossConnector.class, remap = false)
 public interface CrossConnectorPieceAccessor {
 	
 	@Accessor

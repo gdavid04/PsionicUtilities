@@ -18,7 +18,7 @@ import vazkii.psi.common.spell.other.PieceCrossConnector;
 
 import static net.minecraft.client.gui.screens.Screen.hasControlDown;
 
-@Mixin(GuiProgrammer.class)
+@Mixin(value = GuiProgrammer.class, remap = false)
 public abstract class ProgrammerGuiMixin {
 	
 	@Shadow public int gridTop, gridLeft;
@@ -37,7 +37,7 @@ public abstract class ProgrammerGuiMixin {
 	private int dragX, dragY;
 	private boolean isMoving;
 	
-	@Inject(method = "mouseClicked", at = @At("TAIL"))
+	@Inject(method = "mouseClicked", at = @At("TAIL"), remap = true)
 	private void dragStart(double mx, double my, int button, CallbackInfoReturnable<Boolean> callback) {
 		if (commentEnabled) return;
 		if (button == 0) {
@@ -47,7 +47,7 @@ public abstract class ProgrammerGuiMixin {
 		}
 	}
 	
-	@Inject(method = "mouseMoved", at = @At("HEAD"), remap = false)
+	@Inject(method = {"mouseMoved", "m_94757_"}, at = @At("HEAD"))
 	private void dragActions(double mx, double my, CallbackInfo callback) {
 		if (commentEnabled) return;
 		if (Minecraft.getInstance().mouseHandler.activeButton != 0) return;
