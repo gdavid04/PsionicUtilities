@@ -2,7 +2,7 @@ package gdavid.psionicutilities.mixin;
 
 import java.util.Iterator;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
@@ -31,16 +31,16 @@ public class StatWidgetMixin {
 	
 	@Shadow @Final private GuiProgrammer parent;
 	
-	@Inject(method = "lambda$renderButton$0",
+	@Inject(method = "lambda$renderWidget$0",
 			at = @At(value = "INVOKE", target = "Lvazkii/psi/api/spell/SpellMetadata;getStat(Lvazkii/psi/api/spell/EnumSpellStat;)I"),
 			locals = LocalCapture.CAPTURE_FAILHARD)
-	private void capture(PoseStack ms, int mouseX, int mouseY, CompiledSpell compiledSpell, CallbackInfo callback,
+	private void capture(GuiGraphics graphics, int mouseX, int mouseY, CompiledSpell compiledSpell, CallbackInfo callback,
 			int i, int statX, SpellMetadata meta, ItemStack cad, Iterator<?> var9, EnumSpellStat stat) {
 		currentStat.set(stat);
 	}
 	
-	@ModifyArg(method = "lambda$renderButton$0",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/Font;draw(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/lang/String;FFI)I", remap = true),
+	@ModifyArg(method = "lambda$renderWidget$0",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I", remap = true),
 			index = 4)
 	private int setColor(int color) {
 		if (currentStat.get() == EnumSpellStat.COST) {

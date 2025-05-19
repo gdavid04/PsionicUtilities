@@ -1,14 +1,16 @@
 package gdavid.psionicutilities.mixin;
 
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import gdavid.psionicutilities.PieceAnnotation;
 import gdavid.psionicutilities.PsionicUtilities;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 
@@ -16,7 +18,6 @@ import gdavid.psionicutilities.ConnectorColor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import vazkii.psi.api.ClientPsiAPI;
 import vazkii.psi.api.spell.IGenericRedirector;
 import vazkii.psi.api.spell.SpellParam;
 import vazkii.psi.api.spell.SpellPiece;
@@ -54,7 +55,7 @@ public abstract class SpellPieceMixin {
 	
 	@OnlyIn(Dist.CLIENT)
 	@Inject(method = "drawCommentText", at = @At("HEAD"))
-	private void visibleCommentText(PoseStack ms, int tooltipX, int tooltipY, List<Component> commentText, Screen screen, CallbackInfo callback) {
+	private void visibleCommentText(GuiGraphics graphics, int tooltipX, int tooltipY, List<Component> commentText, Screen screen, CallbackInfo callback) {
 		PieceAnnotation.filterComment(commentText);
 	}
 	
@@ -63,7 +64,7 @@ public abstract class SpellPieceMixin {
 		int r = (value >> 16) & 0xFF;
 		int g = (value >> 8) & 0xFF;
 		int b = value & 0xFF;
-		Material material = new Material(ClientPsiAPI.PSI_PIECE_TEXTURE_ATLAS, new ResourceLocation(PsionicUtilities.modId, "spell/highlight"));
+		Material material = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(PsionicUtilities.modId, "spell/highlight"));
 		VertexConsumer buf = material.buffer(buffers, ignore -> SpellPiece.getLayer());
 		Matrix4f mat = ms.last().pose();
 		buf.vertex(mat, -1, 17, 0).color(r, g, b, 128);
