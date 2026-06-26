@@ -1,16 +1,15 @@
 package gdavid.psionicutilities.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
+import gdavid.psionicutilities.ConnectorColor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
-
-import gdavid.psionicutilities.ConnectorColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import vazkii.psi.api.spell.IGenericRedirector;
 import vazkii.psi.api.spell.Spell;
 import vazkii.psi.api.spell.SpellParam;
@@ -29,11 +28,11 @@ public abstract class CrossConnectorMixin extends SpellPiece implements IGeneric
 	}
 	
 	@OnlyIn(Dist.CLIENT)
-	@Redirect(method = "drawSide", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/VertexConsumer;color(FFFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;", remap = true))
-	private VertexConsumer sideColor(VertexConsumer builder, float r, float g, float b, float a, PoseStack ms, MultiBufferSource buffers, Side side, int light, int color) {
+	@WrapOperation(method = "drawSide", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/VertexConsumer;setColor(FFFF)Lcom/mojang/blaze3d/vertex/VertexConsumer;", remap = true))
+	private VertexConsumer sideColor(VertexConsumer builder, float r, float g, float b, float a, Operation<VertexConsumer> original, @Local(argsOnly = true) Side side) {
 		boolean which = side == paramSides.get(in2) || side == paramSides.get(out2);
 		float[] rgb = ConnectorColor.colorFor(this, which ? paramSides.get(in2) : paramSides.get(in1));
-		return builder.color(rgb[0], rgb[1], rgb[2], a);
+		return original.call(builder, rgb[0], rgb[1], rgb[2], a);
 	}
 	
 }

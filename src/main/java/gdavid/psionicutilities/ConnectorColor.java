@@ -1,10 +1,13 @@
 package gdavid.psionicutilities;
 
-import java.awt.Color;
-
 import vazkii.psi.api.internal.PsiRenderHelper;
-import vazkii.psi.api.spell.*;
+import vazkii.psi.api.spell.IRedirector;
+import vazkii.psi.api.spell.SpellCompilationException;
+import vazkii.psi.api.spell.SpellGrid;
 import vazkii.psi.api.spell.SpellParam.Side;
+import vazkii.psi.api.spell.SpellPiece;
+
+import java.awt.*;
 
 public class ConnectorColor {
 	

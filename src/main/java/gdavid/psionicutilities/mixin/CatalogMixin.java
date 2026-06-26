@@ -1,5 +1,8 @@
 package gdavid.psionicutilities.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.llamalad7.mixinextras.sugar.Local;
 import gdavid.psionicutilities.Config;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
@@ -8,9 +11,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import vazkii.psi.api.spell.SpellCompilationException;
 import vazkii.psi.api.spell.SpellPiece;
 import vazkii.psi.client.gui.GuiProgrammer;
@@ -22,13 +23,13 @@ public class CatalogMixin {
 	
 	@Shadow @Final public GuiProgrammer parent;
 	
-	@Redirect(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;hasAltDown()Z", remap = true), remap = true)
-	private boolean hasAltDown() {
-		return Config.instance.foucsPreviousWithShift.get() ? Screen.hasShiftDown() : Screen.hasAltDown();
+	@WrapOperation(method = "keyPressed", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/Screen;hasAltDown()Z", remap = true), remap = true)
+	private boolean hasAltDown(Operation<Boolean> original) {
+		return Config.instance.foucsPreviousWithShift.get() ? Screen.hasShiftDown() : original.call();
 	}
 	
-	@Inject(method = "lambda$populatePanelButtons$0", at = @At(value = "INVOKE_ASSIGN", target = "Lvazkii/psi/api/spell/SpellPiece;copyFromSpell(Lvazkii/psi/api/spell/Spell;)Lvazkii/psi/api/spell/SpellPiece;"), locals = LocalCapture.CAPTURE_FAILHARD)
-	private void quickArg(Button button, CallbackInfo callback, SpellPiece piece) {
+	@Inject(method = "lambda$populatePanelButtons$1", at = @At(value = "INVOKE_ASSIGN", target = "Lvazkii/psi/api/spell/SpellPiece;copyFromSpell(Lvazkii/psi/api/spell/Spell;)Lvazkii/psi/api/spell/SpellPiece;"))
+	private void quickArg(Button button, CallbackInfo callback, @Local(name = "piece1") SpellPiece piece) {
 		var old = parent.spell.grid.gridData[GuiProgrammer.selectedX][GuiProgrammer.selectedY];
 		if (!(old instanceof PieceConnector connector)) return;
 		var side = connector.paramSides.get(connector.target);

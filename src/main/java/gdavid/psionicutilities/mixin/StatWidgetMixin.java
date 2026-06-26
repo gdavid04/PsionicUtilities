@@ -1,23 +1,16 @@
 package gdavid.psionicutilities.mixin;
 
-import java.util.Iterator;
-
-import net.minecraft.client.gui.GuiGraphics;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
 import vazkii.psi.api.PsiAPI;
 import vazkii.psi.api.cad.EnumCADStat;
 import vazkii.psi.api.cad.ICAD;
-import vazkii.psi.api.spell.CompiledSpell;
 import vazkii.psi.api.spell.EnumSpellStat;
 import vazkii.psi.api.spell.SpellMetadata;
 import vazkii.psi.client.gui.GuiProgrammer;
@@ -27,23 +20,11 @@ import vazkii.psi.common.item.ItemCAD;
 @Mixin(value = SpellCostsWidget.class, remap = false)
 public class StatWidgetMixin {
 	
-	private static final ThreadLocal<EnumSpellStat> currentStat = new ThreadLocal<>();
-	
 	@Shadow @Final private GuiProgrammer parent;
 	
-	@Inject(method = "lambda$renderWidget$0",
-			at = @At(value = "INVOKE", target = "Lvazkii/psi/api/spell/SpellMetadata;getStat(Lvazkii/psi/api/spell/EnumSpellStat;)I"),
-			locals = LocalCapture.CAPTURE_FAILHARD)
-	private void capture(GuiGraphics graphics, int mouseX, int mouseY, CompiledSpell compiledSpell, CallbackInfo callback,
-			int i, int statX, SpellMetadata meta, ItemStack cad, Iterator<?> var9, EnumSpellStat stat) {
-		currentStat.set(stat);
-	}
-	
-	@ModifyArg(method = "lambda$renderWidget$0",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I", remap = true),
-			index = 4)
-	private int setColor(int color) {
-		if (currentStat.get() == EnumSpellStat.COST) {
+	@ModifyArg(method = "lambda$renderWidget$0", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;drawString(Lnet/minecraft/client/gui/Font;Ljava/lang/String;IIIZ)I", remap = true), index = 4)
+	private int setColor(int color, @Local(name = "stat") EnumSpellStat stat) {
+		if (stat == EnumSpellStat.COST) {
 			if (parent.compileResult.left().isPresent()) {
 				Player player = parent.getMinecraft().player;
 				SpellMetadata meta = parent.compileResult.left().get().metadata;
