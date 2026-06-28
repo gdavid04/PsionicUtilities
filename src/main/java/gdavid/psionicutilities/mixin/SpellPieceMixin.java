@@ -64,7 +64,7 @@ public abstract class SpellPieceMixin {
 		int r = (value >> 16) & 0xFF;
 		int g = (value >> 8) & 0xFF;
 		int b = value & 0xFF;
-		VertexConsumer buf = PsionicUtilities.HIGHLIGHT.get().buffer(buffers, ignore -> SpellPiece.getLayer());
+		VertexConsumer buf = PsionicUtilities.HIGHLIGHT.buffer(buffers, ignore -> SpellPiece.getLayer());
 		Matrix4f mat = ms.last().pose();
 		buf.addVertex(mat, -1, 17, 0).setColor(r, g, b, 128);
 		buf.setUv(0, 1).setLight(light);
