@@ -46,7 +46,7 @@ public class PieceAnnotation {
 	}
 	
 	public static Optional<Integer> getColor(SpellPiece piece, String annotation) {
-		return get(piece, annotation).map(c -> Optional.ofNullable(TextColor.parseColor(c)).map(TextColor::getValue).orElse(ConnectorColor.errorColor));
+		return get(piece, annotation).map(c -> TextColor.parseColor(c).mapOrElse(TextColor::getValue, e -> ConnectorColor.errorColor));
 	}
 	
 }

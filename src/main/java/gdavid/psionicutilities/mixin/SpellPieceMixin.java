@@ -1,22 +1,22 @@
 package gdavid.psionicutilities.mixin;
 
-import com.mojang.blaze3d.vertex.*;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import gdavid.psionicutilities.ConnectorColor;
 import gdavid.psionicutilities.PieceAnnotation;
 import gdavid.psionicutilities.PsionicUtilities;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.*;
-
-import gdavid.psionicutilities.ConnectorColor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vazkii.psi.api.spell.IGenericRedirector;
 import vazkii.psi.api.spell.SpellParam;
@@ -28,15 +28,15 @@ import java.util.List;
 public abstract class SpellPieceMixin {
 	
 	@OnlyIn(Dist.CLIENT)
-	@Redirect(method = "drawParam(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ILvazkii/psi/api/spell/SpellParam$Side;ILvazkii/psi/api/spell/SpellParam$ArrowType;F)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/VertexConsumer;color(IIII)Lcom/mojang/blaze3d/vertex/VertexConsumer;", remap = true))
-	private VertexConsumer paramColor(VertexConsumer builder, int r, int g, int b, int a, PoseStack ms, VertexConsumer buffer, int light, SpellParam.Side side, int color, SpellParam.ArrowType arrowType, float percent) {
+	@Redirect(method = "drawParam(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ILvazkii/psi/api/spell/SpellParam$Side;ILvazkii/psi/api/spell/SpellParam$ArrowType;F)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/VertexConsumer;setColor(IIII)Lcom/mojang/blaze3d/vertex/VertexConsumer;", remap = true))
+	private VertexConsumer paramColor(VertexConsumer builder, int r, int g, int b, int a, @Local(argsOnly = true) SpellParam.Side side) {
 		SpellPiece self = (SpellPiece) (Object) this;
 		// TODO Phi IWarpRedirector support
 		if (self instanceof IGenericRedirector) {
 			float[] rgb = ConnectorColor.colorFor(self, side);
-			return builder.color(rgb[0], rgb[1], rgb[2], a / 255f);
+			return builder.setColor(rgb[0], rgb[1], rgb[2], a / 255f);
 		}
-		return builder.color(r, g, b, a);
+		return builder.setColor(r, g, b, a);
 	}
 	
 	@OnlyIn(Dist.CLIENT)
@@ -64,17 +64,16 @@ public abstract class SpellPieceMixin {
 		int r = (value >> 16) & 0xFF;
 		int g = (value >> 8) & 0xFF;
 		int b = value & 0xFF;
-		Material material = new Material(TextureAtlas.LOCATION_BLOCKS, new ResourceLocation(PsionicUtilities.modId, "spell/highlight"));
-		VertexConsumer buf = material.buffer(buffers, ignore -> SpellPiece.getLayer());
+		VertexConsumer buf = PsionicUtilities.HIGHLIGHT.buffer(buffers, ignore -> SpellPiece.getLayer());
 		Matrix4f mat = ms.last().pose();
-		buf.vertex(mat, -1, 17, 0).color(r, g, b, 128);
-		buf.uv(0, 1).uv2(light).endVertex();
-		buf.vertex(mat, 17, 17, 0).color(r, g, b, 128);
-		buf.uv(1, 1).uv2(light).endVertex();
-		buf.vertex(mat, 17, -1, 0).color(r, g, b, 128);
-		buf.uv(1, 0).uv2(light).endVertex();
-		buf.vertex(mat, -1, -1, 0).color(r, g, b, 128);
-		buf.uv(0, 0).uv2(light).endVertex();
+		buf.addVertex(mat, -1, 17, 0).setColor(r, g, b, 128);
+		buf.setUv(0, 1).setLight(light);
+		buf.addVertex(mat, 17, 17, 0).setColor(r, g, b, 128);
+		buf.setUv(1, 1).setLight(light);
+		buf.addVertex(mat, 17, -1, 0).setColor(r, g, b, 128);
+		buf.setUv(1, 0).setLight(light);
+		buf.addVertex(mat, -1, -1, 0).setColor(r, g, b, 128);
+		buf.setUv(0, 0).setLight(light);
 		ms.translate(0, 0, 0.1f);
 	}
 	

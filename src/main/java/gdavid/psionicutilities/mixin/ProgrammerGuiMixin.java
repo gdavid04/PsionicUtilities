@@ -47,7 +47,7 @@ public abstract class ProgrammerGuiMixin {
 		}
 	}
 	
-	@Inject(method = {"mouseMoved", "m_94757_"}, at = @At("HEAD"))
+	@Inject(method = "mouseMoved", at = @At("HEAD"))
 	private void dragActions(double mx, double my, CallbackInfo callback) {
 		if (commentEnabled) return;
 		if (Minecraft.getInstance().mouseHandler.activeButton != 0) return;
